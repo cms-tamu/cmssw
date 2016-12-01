@@ -12,6 +12,7 @@ MCMultiParticleFilter::MCMultiParticleFilter(const edm::ParameterSet& iConfig) :
   totalEvents_(0), passedEvents_(0)
 {
   //here do whatever other initialization is needed
+  token_ = consumes<edm::HepMCProduct>(edm::InputTag(src_));
 
   // default pt, eta, status cuts to "don't care"
   std::vector<double> defptmin(1, 0);
@@ -47,7 +48,7 @@ MCMultiParticleFilter::~MCMultiParticleFilter()
 bool MCMultiParticleFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   edm::Handle<edm::HepMCProduct> evt;
-  iEvent.getByLabel(src_, evt);
+  iEvent.getByToken(token_, evt);
   
   totalEvents_++;
   int nFound = 0;
